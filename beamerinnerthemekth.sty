@@ -1,0 +1,35 @@
+\mode<presentation>
+
+\defbeamertemplate*{title page}{kth}[1][]
+{
+  \tikz[remember picture,overlay]%
+  \node[inner sep=0cm, xshift=3.75mm, yshift=-3.75mm, anchor=north west]%
+  at (current page.north west)%
+  {\includegraphics[height=15mm]{logo.pdf}};
+  \tikz[remember picture,overlay]%
+  \node[yshift=-3mm, inner sep=2.5mm, anchor=south]%
+  at (current page.south)%
+  {\includegraphics[trim=20cm 0 21cm 0, width=\paperwidth]{lines.pdf}};
+  \vskip 2mm
+  \begin{beamercolorbox}[leftskip=13mm, #1]{title}
+    \usebeamerfont{title}\inserttitle\par%
+    \ifx\insertsubtitle\@empty%
+    \else%
+    \vspace{2mm}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+    \fi%
+  \end{beamercolorbox}\vspace{4mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{author}
+    \usebeamerfont{author}\insertauthor
+  \end{beamercolorbox}\vspace{2mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{institute}
+    \usebeamerfont{institute}\insertinstitute
+  \end{beamercolorbox}\vspace{2mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{date}
+    \usebeamerfont{date}\insertdate
+  \end{beamercolorbox}
+  %{\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+}
+
+\mode
+<all>

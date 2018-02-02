@@ -1,0 +1,53 @@
+\mode<presentation>
+
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+
+\defbeamertemplate*{navigation symbols}{kth}{}
+
+
+\defbeamertemplate*{footline}{kth}
+{
+  \tikz[remember picture,overlay]%
+  \node[yshift=-1mm,inner sep=0pt,anchor=south]%
+  at (current page.south)%
+  {\includegraphics[
+    trim=18cm 0 15cm 0,
+    width=\paperwidth,
+    height=0.08\paperheight]{plate.pdf}
+  };
+  \vskip 0.10\paperheight
+  \hfill%
+  \usebeamercolor[fg]{page number in head/foot}%
+  \usebeamerfont{page number in head/foot}%
+  \insertframenumber\,/\,\inserttotalframenumber\kern1em\vskip7pt%
+}
+
+\defbeamertemplate*{frametitle}{kth}[1][left]
+{
+  \tikz[remember picture,overlay]%
+  \node[inner sep=0cm, xshift=2.5mm, yshift=-2.5mm, anchor=north west]%
+  at (current page.north west)%
+  {\includegraphics[height=10mm]{logo.pdf}};
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+  \begin{beamercolorbox}[sep=0.3cm,#1,wd=\the\@tempdima,leftskip=13mm]{frametitle}
+    \usebeamerfont{frametitle}%
+    \vbox{}\vskip-7mm%
+    \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1ex%
+    \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{beamercolorbox}%
+}
+
+\mode
+<all>
