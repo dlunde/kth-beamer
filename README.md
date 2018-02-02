@@ -4,9 +4,9 @@ A minimalistic beamer theme for KTH presentations. Adds a few graphical elements
 ## Usage
 See `example.tex`. Note that the title frame needs to be specified as
 
-`\begin{frame}[plain, t]
+```\begin{frame}[plain, t]
   \titlepage
-\end{frame}`
+\end{frame}```
 
 in order to display correctly.
 
