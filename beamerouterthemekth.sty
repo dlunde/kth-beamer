@@ -35,7 +35,7 @@
   \advance\@tempdima by\beamer@rightmargin%
   \begin{beamercolorbox}[sep=0.3cm,#1,wd=\the\@tempdima,leftskip=13mm]{frametitle}
     \usebeamerfont{frametitle}%
-    \vbox{}\vskip-7mm%
+    \vbox{}\vskip-7.5mm%
     \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
     \strut\insertframetitle\strut\par%
     {%
@@ -44,7 +44,7 @@
       {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
       \fi
     }%
-    \vskip-1ex%
+    \vskip-1.6mm%
     \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
   \end{beamercolorbox}%
 }
