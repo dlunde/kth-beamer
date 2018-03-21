@@ -15,14 +15,12 @@
     width=\paperwidth,
     height=0.08\paperheight]{plate.pdf}
   };
-  \vskip 0.03\paperheight
+  \vskip 0.10\paperheight
   \hfill%
   \usebeamercolor[fg]{page number in head/foot}%
   \usebeamerfont{page number in head/foot}%
   \insertframenumber\,/\,\inserttotalframenumber\kern1em\vskip7pt%
 }
-
-\setlength{\fboxsep}{0pt}
 
 \defbeamertemplate*{frametitle}{kth}[1][left]
 {
@@ -32,12 +30,12 @@
   \advance\@tempdima by\beamer@rightmargin%
   \begin{beamercolorbox}[#1,wd=\the\@tempdima]{frametitle}
     \usebeamerfont{frametitle}%
-      \begin{minipage}[c][15mm][t]{15mm}
+      \begin{minipage}[c][12.5mm][t]{15mm}
         \vspace{2.5mm}\hspace{2.5mm}%
         \tikz \node[inner sep=0pt]
         {\includegraphics[height=10mm]{logo.pdf}};
       \end{minipage}%
-      \begin{minipage}[c][15mm][t]{0.8\paperwidth}
+      \begin{minipage}[c][12.5mm][t]{0.8\paperwidth}
         \vspace{0.3cm}
         % If no subtitle, center title with logo
         \ifx\insertframesubtitle\@empty%
