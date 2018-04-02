@@ -1,11 +1,18 @@
 \mode<presentation>
 
+\newcommand\extra[1]{\renewcommand\@extra{#1}}
+\newcommand\@extra{}
+
 \defbeamertemplate*{title page}{kth}[1][]
 {
   \tikz[remember picture,overlay]%
   \node[inner sep=0cm, xshift=3.75mm, yshift=-3.75mm, anchor=north west]%
   at (current page.north west)%
-  {\includegraphics[height=15mm]{logo.pdf}};
+  {\includegraphics[width=15mm, height=15mm, keepaspectratio]{logo.pdf}};
+  \tikz[remember picture,overlay]%
+  \node[inner sep=0cm, xshift=3.75mm, yshift=-22.5mm, anchor=north west]%
+  at (current page.north west)%
+  {\@extra};
   \tikz[remember picture,overlay]%
   \node[yshift=-3mm, inner sep=2.5mm, anchor=south]%
   at (current page.south)%
