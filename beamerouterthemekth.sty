@@ -30,30 +30,29 @@
   \advance\@tempdima by\beamer@rightmargin%
   \begin{beamercolorbox}[#1,wd=\the\@tempdima]{frametitle}
     \usebeamerfont{frametitle}%
-      \begin{minipage}[c][12.5mm][t]{15mm}
-        \vspace{2.5mm}\hspace{2.5mm}%
-        \tikz \node[inner sep=0pt]
-        {\includegraphics[height=10mm]{logo.pdf}};
-      \end{minipage}%
-      \begin{minipage}[c][12.5mm][t]{0.8\paperwidth}
-        \vspace{0.3cm}
-        % If no subtitle, center title with logo
+    \vspace{0cm}% This aligns the colorbox at the top for some reason
+    \begin{minipage}[t][][c]{15mm}
+      \tikz \node[inner sep=2.5mm] {\includegraphics[height=10mm]{logo.pdf}};
+    \end{minipage}%
+    \begin{minipage}[t][][c]{0.8\paperwidth}
+      \vspace{8pt}
+      % If no subtitle, center title with logo
+      \ifx\insertframesubtitle\@empty%
+        \vspace{6pt}%
+      \fi%
+      \usebeamerfont{frametitle}%
+      \vbox{}\vskip-1ex%
+    \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
+      \strut\insertframetitle\strut\par%
+      {%
         \ifx\insertframesubtitle\@empty%
-        \vspace{2mm}%
-        \fi%
-        \usebeamerfont{frametitle}%
-        \vbox{}\vskip-1ex%
-        \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
-        \strut\insertframetitle\strut\par%
-        {%
-          \ifx\insertframesubtitle\@empty%
-          \else%
-          {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
-          \fi
-        }%
-        \vskip-1ex%
-        \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
-      \end{minipage}%
+      \else%
+        {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1ex%
+  \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{minipage}%
   \end{beamercolorbox}%
 }
 
