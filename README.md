@@ -1,5 +1,5 @@
 # kth-beamer
-A minimalistic beamer theme for KTH presentations. Adds a few graphical elements on top of the default beamer theme.
+A minimalistic LaTeX beamer theme for KTH presentations. Adds a few graphical elements on top of the default beamer theme.
 
 ## Usage
 See `example.tex`. Note that the title frame needs to be specified as
