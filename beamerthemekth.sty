@@ -1,9 +1,108 @@
 \mode<presentation>
 
-\usefonttheme{kth}
-\usecolortheme{kth}
-\useinnertheme{kth}
-\useoutertheme{kth}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+
+% COMMANDS
+\newcommand\extra[1]{\renewcommand\@extra{#1}}
+\newcommand\@extra{}
+
+% COLOR
+\definecolor{kthblue}{RGB}{25,84,166} % use structure theme to change
+
+\setbeamercolor{structure}{fg=kthblue}
+
+\setbeamercolor{page number in head/foot}{fg=white}
+
+% INNER THEME
+\defbeamertemplate*{title page}{kth}[1][]
+{
+  \tikz[remember picture,overlay]%
+  \node[inner sep=0cm, xshift=3.75mm, yshift=-3.75mm, anchor=north west]%
+  at (current page.north west)%
+  {\includegraphics[width=15mm, height=15mm, keepaspectratio]{logo.pdf}};
+  \tikz[remember picture,overlay]%
+  \node[inner sep=0cm, xshift=3.75mm, yshift=-22.5mm, anchor=north west]%
+  at (current page.north west)%
+  {\@extra};
+  \tikz[remember picture,overlay]%
+  \node[yshift=-3mm, inner sep=2.5mm, anchor=south]%
+  at (current page.south)%
+  {\includegraphics[trim=20cm 0 21cm 0, width=\paperwidth]{lines.pdf}};
+  \vskip 2mm
+  \begin{beamercolorbox}[leftskip=13mm, #1]{title}
+    \usebeamerfont{title}\inserttitle\par%
+    \ifx\insertsubtitle\@empty%
+    \else%
+    \vspace{2mm}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+    \fi%
+  \end{beamercolorbox}\vspace{4mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{author}
+    \usebeamerfont{author}\insertauthor
+  \end{beamercolorbox}\vspace{2mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{institute}
+    \usebeamerfont{institute}\insertinstitute
+  \end{beamercolorbox}\vspace{2mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{date}
+    \usebeamerfont{date}\insertdate
+  \end{beamercolorbox}
+}
+
+% OUTER THEME
+\defbeamertemplate*{navigation symbols}{kth}{}
+
+\defbeamertemplate*{footline}{kth}
+{
+  \tikz[remember picture,overlay]%
+  \node[yshift=-1mm,inner sep=0pt,anchor=south]%
+  at (current page.south)%
+  {\includegraphics[
+    trim=18cm 0 15cm 0,
+    width=\paperwidth,
+    height=0.08\paperheight]{plate.pdf}
+  };
+  \vskip 0.10\paperheight
+  \hfill%
+  \usebeamercolor[fg]{page number in head/foot}%
+  \usebeamerfont{page number in head/foot}%
+  \insertframenumber\,/\,\inserttotalframenumber\kern1em\vskip7pt%
+}
+
+\defbeamertemplate*{frametitle}{kth}[1][left]
+{
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+  \begin{beamercolorbox}[#1,wd=\the\@tempdima]{frametitle}
+    \usebeamerfont{frametitle}%
+    \vspace{0cm}% This aligns the colorbox at the top for some reason
+    \begin{minipage}[t][][c]{15mm}
+      \tikz \node[inner sep=2.5mm] {\includegraphics[height=10mm]{logo.pdf}};
+    \end{minipage}%
+    \begin{minipage}[t][][c]{0.8\paperwidth}
+      \vspace{8pt}
+      % If no subtitle, center title with logo
+      \ifx\insertframesubtitle\@empty%
+        \vspace{6pt}%
+      \fi%
+      \usebeamerfont{frametitle}%
+      \vbox{}\vskip-1ex%
+    \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
+      \strut\insertframetitle\strut\par%
+      {%
+        \ifx\insertframesubtitle\@empty%
+      \else%
+        {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}%
+        \insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1ex%
+  \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{minipage}%
+  \end{beamercolorbox}%
+}
 
 \mode
 <all>
