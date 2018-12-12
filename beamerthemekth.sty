@@ -7,6 +7,9 @@
 \newcommand\extra[1]{\renewcommand\@extra{#1}}
 \newcommand\@extra{}
 
+\newcommand\footline[1]{\renewcommand\@footline{#1}}
+\newcommand\@footline{}
+
 % COLOR
 \definecolor{kthblue}{RGB}{25,84,166} % use structure theme to change
 
@@ -55,18 +58,20 @@
 \defbeamertemplate*{footline}{kth}
 {
   \tikz[remember picture,overlay]%
-  \node[yshift=-1mm,inner sep=0pt,anchor=south]%
+  \node[yshift=-1pt,inner sep=0pt,anchor=south]%
   at (current page.south)%
   {\includegraphics[
-    trim=18cm 0 15cm 0,
-    width=\paperwidth,
-    height=0.08\paperheight]{plate.pdf}
+   trim=18cm 0 15cm 0,
+   width=\paperwidth,
+   height=10mm]{plate.pdf}
   };
   \vskip 0.10\paperheight
-  \hfill%
+  \hspace{25mm}%
   \usebeamercolor[fg]{page number in head/foot}%
   \usebeamerfont{page number in head/foot}%
-  \insertframenumber\,/\,\inserttotalframenumber\kern1em\vskip7pt%
+  \parbox[b][7mm][c]{0.7\paperwidth}{\@footline}
+  \hfill%
+  \insertframenumber\,/\,\inserttotalframenumber\kern4pt\vskip3pt%
 }
 
 \defbeamertemplate*{frametitle}{kth}[1][left]
