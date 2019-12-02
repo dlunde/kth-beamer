@@ -15,7 +15,7 @@
 
 \setbeamercolor{structure}{fg=kthblue}
 
-\setbeamercolor{page number in head/foot}{fg=white}
+\setbeamercolor{page number in head/foot}{fg=gray}
 
 % INNER THEME
 \defbeamertemplate*{title page}{kth}[1][]
@@ -29,9 +29,9 @@
   at (current page.north west)%
   {\@extra};
   \tikz[remember picture,overlay]%
-  \node[yshift=-3mm, inner sep=2.5mm, anchor=south]%
+  \node[yshift=1mm, inner sep=2.5mm, anchor=south]%
   at (current page.south)%
-  {\includegraphics[trim=20cm 0 21cm 0, width=\paperwidth]{lines.pdf}};
+  {\includegraphics[width=0.94\paperwidth,trim=25cm 0 20cm 0,clip]{lines.pdf}};
   \vskip 2mm
   \begin{beamercolorbox}[leftskip=13mm, #1]{title}
     \usebeamerfont{title}\inserttitle\par%
@@ -57,21 +57,23 @@
 
 \defbeamertemplate*{footline}{kth}
 {
-  \tikz[remember picture,overlay]%
-  \node[yshift=-1pt,inner sep=0pt,anchor=south]%
-  at (current page.south)%
-  {\includegraphics[
-   trim=18cm 0 15cm 0,
-   width=\paperwidth,
-   height=11mm]{plate.pdf}
-  };
-  \vskip 0.10\paperheight
-  \hspace{25mm}%
-  \usebeamercolor[fg]{page number in head/foot}%
-  \usebeamerfont{page number in head/foot}%
-  \parbox[c][8mm][c]{0.70\paperwidth}{\@footline}
-  \hfill%
-  \insertframenumber\,/\,\inserttotalframenumber\kern10pt\vskip4pt%
+  \tikz[remember picture,overlay]
+  \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);
+%  \node[yshift=-1pt,inner sep=0pt,anchor=south]%
+%  at (current page.south)%
+%  {\includegraphics[
+%   trim=18cm 0 15cm 0,
+%   width=\paperwidth,
+%   height=11mm]{plate.pdf}
+%  };
+\usebeamercolor[fg]{page number in head/foot}%
+\usebeamerfont{page number in head/foot}%
+\hspace{3mm}%
+\parbox[c][8mm][c]{0.70\paperwidth}{\@footline}%
+\hfill%
+\insertframenumber\,/\,\inserttotalframenumber%
+\hspace*{3.8mm}%
+\vspace{-1.1mm}
 }
 
 \defbeamertemplate*{frametitle}{kth}[1][left]
