@@ -57,23 +57,16 @@
 
 \defbeamertemplate*{footline}{kth}
 {
-  \tikz[remember picture,overlay]
-  \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);
-%  \node[yshift=-1pt,inner sep=0pt,anchor=south]%
-%  at (current page.south)%
-%  {\includegraphics[
-%   trim=18cm 0 15cm 0,
-%   width=\paperwidth,
-%   height=11mm]{plate.pdf}
-%  };
-\usebeamercolor[fg]{page number in head/foot}%
-\usebeamerfont{page number in head/foot}%
-\hspace{3mm}%
-\parbox[c][8mm][c]{0.70\paperwidth}{\@footline}%
-\hfill%
-\insertframenumber\,/\,\inserttotalframenumber%
-\hspace*{3.8mm}%
-\vspace{-1.1mm}
+  \tikz[remember picture,overlay]%
+  \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
+  \usebeamercolor[fg]{page number in head/foot}%
+  \usebeamerfont{page number in head/foot}%
+  \hspace*{0.03\paperwidth}%
+  \parbox[c][8mm][c]{0.70\paperwidth}{\@footline}%
+  \hfill%
+  \insertframenumber\,/\,\inserttotalframenumber%
+  \hspace*{0.03\paperwidth}%
+  \vspace{-1.1mm}
 }
 
 \defbeamertemplate*{frametitle}{kth}[1][left]
