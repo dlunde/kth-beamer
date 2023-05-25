@@ -12,3 +12,5 @@ See `example.tex`. Note that the title frame needs to be specified as
 
 in order to display correctly.
 
+## Contributions
+Contributions to the theme are welcome!
