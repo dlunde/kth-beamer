@@ -24,6 +24,20 @@
 \newcommand\kthrfoot[1]{\renewcommand\beamer@KTH@rfoot{#1}}
 \DeclareOptionBeamer{rfoot}{\kthrfoot{#1}}
 
+% "lines": How to render the lines on the title slide
+\newcommand\beamer@KTH@lines{pdf}
+\newcommand\kthlines[1]{\renewcommand\beamer@KTH@lines{#1}}
+\DeclareOptionBeamer{lines}{\kthlines{#1}}
+\DeclareOptionBeamer{pdflines}{\kthlines{pdf}}
+\DeclareOptionBeamer{tikzlines}{\kthlines{tikz}}
+
+% "titlestyle": The style to use for text on the title slide
+%  - topleft: Text aligned to the top left (but right of KTH logo)
+%  - centered: Text aligned in the center of the slide
+\newcommand\beamer@KTH@titlestyle{topleft}
+\newcommand\kthtitlestyle[1]{\renewcommand\beamer@KTH@titlestyle{#1}}
+\DeclareOptionBeamer{titlestyle}{\kthtitlestyle{#1}}
+
 \ProcessOptionsBeamer
 
 % REQUIRED PACKAGES
@@ -41,8 +55,6 @@
 % COLOR
 \definecolor{kthblue}{RGB}{25,84,166} % use structure theme to change
 
-\setbeamercolor{frametitle}{fg=kthblue}
-\setbeamercolor{framesubtitle}{fg=kthblue}
 \setbeamercolor{structure}{fg=kthblue}
 
 \setbeamercolor{page number in head/foot}{fg=gray}
@@ -62,25 +74,76 @@
   \tikz[remember picture,overlay]%
   \node[yshift=1mm, inner sep=2.5mm, anchor=south]%
   at (current page.south)%
-  {\includegraphics[width=0.94\paperwidth,trim=25cm 0 20cm 0,clip]{img/lines.pdf}};
-  \vskip 2mm
-  \begin{beamercolorbox}[leftskip=13mm, #1]{title}
-    \usebeamerfont{title}\inserttitle\par%
-    \ifx\insertsubtitle\@empty%
-    \else%
-    \vspace{2mm}
-    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
-    \fi%
-  \end{beamercolorbox}\vspace{4mm}
-  \begin{beamercolorbox}[leftskip=13mm,#1]{author}
-    \usebeamerfont{author}\insertauthor
-  \end{beamercolorbox}\vspace{2mm}
-  \begin{beamercolorbox}[leftskip=13mm,#1]{institute}
-    \usebeamerfont{institute}\insertinstitute
-  \end{beamercolorbox}\vspace{2mm}
-  \begin{beamercolorbox}[leftskip=13mm,#1]{date}
-    \usebeamerfont{date}\insertdate
-  \end{beamercolorbox}
+  {%
+  %LINES
+  \ifnum\pdf@strcmp{\beamer@KTH@lines}{pdf}=0%
+    \includegraphics[width=0.94\paperwidth,trim=25cm 0 20cm 0,clip]{img/lines.pdf}%
+  \else\ifnum\pdf@strcmp{\beamer@KTH@lines}{tikz}=0%
+    \resizebox{0.94\paperwidth}{!}{%
+      \begin{tikzpicture}[line width=0.25pt,rounded corners=2pt,color=kthblue,x=2mm,y=2mm]
+        \clip (4,-1) rectangle (81, 12);
+        \draw (0,9.5) -- (15,9.5) -- (15,1.7) -- (30,1.7) -- (30,8) -- (44.5,8) -- (44.5,0) -- (55,0) -- (55,9.5)
+        -- (63,9.5) -- (63,1) -- (77,1) -- (77,8) -- (82,8) -- (82,6) -- (95,6);
+        \draw (0,8) -- (5,8) -- (5,4) -- (20,4) -- (20,9.5) -- (30.5,9.5) -- (30.5,4) -- (48,4) -- (48,7) -- (66,7)
+        -- (66,5) -- (73,5) -- (73,10) -- (84.5,10) -- (84.5,3) -- (95,3);
+        \draw (0,7) -- (7,7) -- (7,11.5) -- (11,11.5) -- (11,5) -- (18,5) -- (18,8) -- (28.5,8) -- (28.5,5)
+        -- (32,5) -- (32,7) -- (36,7) -- (36,5.5) -- (60,5.5) -- (60,11.5) -- (68,11.5) -- (68,7) -- (80,7) -- (80,11) -- (95,11);
+        \draw (0,1.7) -- (9,1.7) -- (9,0) -- (33,0) -- (33,1.7) -- (76,1.7) -- (76,0) -- (95,0);
+        \draw (0,1) -- (13,1) -- (13,7) -- (25,7) -- (25,1) -- (42,1) -- (42,10) -- (57,10) -- (57,4) -- (61.7,4)
+        -- (61.7,8) -- (71,8) -- (71,-0.5) -- (82,-0.5) -- (82,4) -- (95,4);
+      \end{tikzpicture}%
+    }%
+  \else%
+    \PackageError{beamerthemekth}{Invalid lines style \beamer@KTH@lines}{extra help}
+  \fi\fi%
+  %
+  };
+  %TITLESTYLE
+  \ifnum\pdf@strcmp{\beamer@KTH@titlestyle}{topleft}=0%
+    \vskip 2mm
+    \begin{beamercolorbox}[leftskip=13mm, #1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+      \vspace{2mm}
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}\vspace{4mm}
+    \begin{beamercolorbox}[leftskip=13mm,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}\vspace{2mm}
+    \begin{beamercolorbox}[leftskip=13mm,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}\vspace{2mm}
+    \begin{beamercolorbox}[leftskip=13mm,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}
+  \else\ifnum\pdf@strcmp{\beamer@KTH@titlestyle}{centered}=0%
+    \tikz[remember picture,overlay]%
+    \node[inner sep=0cm, xshift=0mm, yshift=0mm, anchor=center,align=center]%
+    at (current page.center)%
+    {
+      \begin{beamercolorbox}[center,#1]{title}
+        \usebeamerfont{title}\inserttitle\par%
+        \ifx\insertsubtitle\@empty%
+        \else%
+        \vspace{2mm}
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+        \fi%
+      \end{beamercolorbox}\-\\[4mm]
+      \begin{beamercolorbox}[center,#1]{author}
+        \usebeamerfont{author}\insertauthor
+      \end{beamercolorbox}\-\\[2mm]
+      \begin{beamercolorbox}[center,#1]{institute}
+        \usebeamerfont{institute}\insertinstitute
+      \end{beamercolorbox}\-\\[2mm]
+      \begin{beamercolorbox}[center,#1]{date}
+        \usebeamerfont{date}\insertdate
+      \end{beamercolorbox}
+    };
+  \else%
+    \PackageError{beamerthemekth}{Invalid titlestyle value \beamer@KTH@titlestyle}{extra help}
+  \fi\fi%
 }
 
 % OUTER THEME
