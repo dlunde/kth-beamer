@@ -1,7 +1,35 @@
 \mode<presentation>
 
+% OPTIONS
+
+% "footerstyle": The footer style to use for the outer theme. Available styles:
+%  - lr: Left and right footer contents
+%  - lcr: Left, center, and right footer contents
+\newcommand\beamer@KTH@footerstyle{lr}
+\newcommand\kthfooterstyle[1]{\renewcommand\beamer@KTH@footerstyle{#1}}
+\DeclareOptionBeamer{footerstyle}{\kthfooterstyle{#1}}
+
+% "lfoot": Contents of the left footer
+\newcommand\beamer@KTH@lfoot{\insertdate}
+\newcommand\kthlfoot[1]{\renewcommand\beamer@KTH@lfoot{#1}}
+\DeclareOptionBeamer{lfoot}{\kthlfoot{#1}}
+
+% "cfoot": Contents of the center footer
+\newcommand\beamer@KTH@cfoot{\inserttitle}
+\newcommand\kthcfoot[1]{\renewcommand\beamer@KTH@cfoot{#1}}
+\DeclareOptionBeamer{cfoot}{\kthcfoot{#1}}
+
+% "rfoot": Contents of the right footer
+\newcommand\beamer@KTH@rfoot{\insertframenumber\,/\,\inserttotalframenumber}
+\newcommand\kthrfoot[1]{\renewcommand\beamer@KTH@rfoot{#1}}
+\DeclareOptionBeamer{rfoot}{\kthrfoot{#1}}
+
+\ProcessOptionsBeamer
+
+% REQUIRED PACKAGES
 \RequirePackage{graphicx}
 \RequirePackage{tikz}
+\RequirePackage{pdftexcmds}
 
 % COMMANDS
 \newcommand\extra[1]{\renewcommand\@extra{#1}}
@@ -13,9 +41,12 @@
 % COLOR
 \definecolor{kthblue}{RGB}{25,84,166} % use structure theme to change
 
+\setbeamercolor{frametitle}{fg=kthblue}
+\setbeamercolor{framesubtitle}{fg=kthblue}
 \setbeamercolor{structure}{fg=kthblue}
 
 \setbeamercolor{page number in head/foot}{fg=gray}
+
 
 % INNER THEME
 \defbeamertemplate*{title page}{kth}[1][]
@@ -62,9 +93,25 @@
   \usebeamercolor[fg]{page number in head/foot}%
   \usebeamerfont{page number in head/foot}%
   \hspace*{0.03\paperwidth}%
-  \parbox[c][8mm][c]{0.70\paperwidth}{\@footline}%
-  \hfill%
-  \insertframenumber\,/\,\inserttotalframenumber%
+  % Select footer style (The @{} in tabular removes any padding between cells.)
+  \ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lr}=0%
+    \parbox[c][8mm][c]{0.70\paperwidth}{%
+      \begin{tabular}{@{}p{0.47\paperwidth}@{}p{0.47\paperwidth}@{}}%
+      \raggedright\beamer@KTH@lfoot & %
+      \raggedleft\beamer@KTH@rfoot%
+      \end{tabular}%
+    }%
+  \else\ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lcr}=0%
+    \parbox[c][8mm][c]{0.70\paperwidth}{%
+      \begin{tabular}{@{}p{0.15\paperwidth}@{}p{0.64\paperwidth}@{}p{0.15\paperwidth}@{}}%
+      \raggedright\beamer@KTH@lfoot & %
+      \centering\beamer@KTH@cfoot & %
+      \raggedleft\beamer@KTH@rfoot%
+      \end{tabular}%
+    }%
+  \else%
+    \PackageError{beamerthemekth}{Invalid footer style \beamer@KTH@footerstyle}{extra help}
+  \fi\fi%
   \hspace*{0.03\paperwidth}%
   \vspace{-1.1mm}
 }
