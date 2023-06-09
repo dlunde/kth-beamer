@@ -23,7 +23,7 @@ example-aspect%.pdf:
 	$(PDFLATEX) $(TEXFILE)
 	mv $(PDFFILE) .
 
-example: example.pdf $(foreach ar, 32 43 54 149 1609 1610, example-aspect$(ar).pdf)
+example: example.pdf $(foreach ar, 32 43 54 149 169 1610, example-aspect$(ar).pdf)
 
 clean:
 	git clean -Xdf
