@@ -1,6 +1,7 @@
 \documentclass{beamer}
 
 \usetheme{kth}
+%\usetheme[tikzlines, titlestyle=centered]{kth}
 
 \title[Short Paper Title]
 {Title As It Is In the Proceedings}
@@ -22,7 +23,12 @@
 \date[CFP 2003] % (optional, should be abbreviation of conference name)
 {2019-12-02}
 
-\footline{\today}
+\kthfooterstyle{lcr}
+%\kthlfoot{Left}   % Default is <DATE>
+%\kthcfoot{Center} % Default is <TITLE>
+%\kthrfoot{Right}  % Default is <SLIDE NUMBER>/<TOTAL SLIDES>
+\kthlfoot{\today}
+\kthcfoot{}
 
 \AtBeginSubsection[]
 {
@@ -33,9 +39,7 @@
 \begin{document}
 
 
-\begin{frame}[plain, t]
-  \titlepage
-\end{frame}
+\frame[plain, t]{\titlepage}
 
 \begin{frame}{Outline}
   \tableofcontents

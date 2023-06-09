@@ -1,3 +1,6 @@
+_build/
+example-aspect*.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
