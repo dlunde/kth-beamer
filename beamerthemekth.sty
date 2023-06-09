@@ -49,9 +49,6 @@
 \newcommand\extra[1]{\renewcommand\@extra{#1}}
 \newcommand\@extra{}
 
-\newcommand\footline[1]{\renewcommand\@footline{#1}}
-\newcommand\@footline{}
-
 % COLOR
 \definecolor{kthblue}{RGB}{25,84,166} % use structure theme to change
 
@@ -158,14 +155,14 @@
   \hspace*{0.03\paperwidth}%
   % Select footer style (The @{} in tabular removes any padding between cells.)
   \ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lr}=0%
-    \parbox[c][8mm][c]{0.70\paperwidth}{%
+    \parbox[c][8mm][c]{0.94\paperwidth}{%
       \begin{tabular}{@{}p{0.47\paperwidth}@{}p{0.47\paperwidth}@{}}%
       \raggedright\beamer@KTH@lfoot & %
       \raggedleft\beamer@KTH@rfoot%
       \end{tabular}%
     }%
   \else\ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lcr}=0%
-    \parbox[c][8mm][c]{0.70\paperwidth}{%
+    \parbox[c][8mm][c]{0.94\paperwidth}{%
       \begin{tabular}{@{}p{0.15\paperwidth}@{}p{0.64\paperwidth}@{}p{0.15\paperwidth}@{}}%
       \raggedright\beamer@KTH@lfoot & %
       \centering\beamer@KTH@cfoot & %

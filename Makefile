@@ -1,5 +1,7 @@
 .PHONY: example clean
 
+SHELL = bash
+
 BUILD-DIR = _build
 PDFLATEX = pdflatex -output-directory=$(BUILD-DIR)
 
@@ -21,13 +23,7 @@ example-aspect%.pdf:
 	$(PDFLATEX) $(TEXFILE)
 	mv $(PDFFILE) .
 
-example: example.pdf \
-	     example-aspect32.pdf \
-	     example-aspect43.pdf \
-	     example-aspect54.pdf \
-	     example-aspect149.pdf \
-	     example-aspect1609.pdf \
-	     example-aspect1610.pdf
+example: example.pdf $(foreach ar, 32 43 54 149 1609 1610, example-aspect$(ar).pdf)
 
 clean:
 	git clean -Xdf
