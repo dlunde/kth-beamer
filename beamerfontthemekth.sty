@@ -1,0 +1,32 @@
+% Beamer font theme for KTH
+
+\mode<presentation>
+
+\newcommand\beamer@KTHFONT@ignorecolor{no}
+\DeclareOptionBeamer{nocolor}{\renewcommand\beamer@KTHFONT@ignorecolor{yes}}
+
+\newcommand\beamer@KTHFONT@titlefontonly{no}
+\DeclareOptionBeamer{titlefontonly}{\renewcommand\beamer@KTHFONT@titlefontonly{yes}}
+
+\ProcessOptionsBeamer
+
+\RequirePackage{pdftexcmds}
+
+\ifnum\pdf@strcmp{\beamer@KTHFONT@titlefontonly}{yes}=0
+  \setbeamerfont{title}{family=\fontfamily{qhv},shape=\bfseries}
+  \setbeamerfont{frametitle}{family=\fontfamily{qhv},shape=\bfseries}
+\else
+  \setbeamerfont{structure}{family=\fontfamily{qhv}}
+  \setbeamerfont{tiny structure}{family=\fontfamily{qhv}}
+
+  \setbeamerfont{title}{shape=\bfseries}
+  \setbeamerfont{frametitle}{shape=\bfseries}
+\fi
+
+\ifnum\pdf@strcmp{\beamer@KTHFONT@ignorecolor}{no}=0
+  \setbeamercolor{title}{fg=black}
+  \setbeamercolor{frametitle}{fg=black}
+\fi
+
+\mode
+<all>

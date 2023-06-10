@@ -49,23 +49,32 @@
 \newcommand\extra[1]{\renewcommand\@extra{#1}}
 \newcommand\@extra{}
 
-% COLOR
+% KTH Visual Identity Guide:
+% https://intra.kth.se/polopoly_fs/1.846579.1588166562!/Grafisk_manual_2020_03_FINAL_low.pdf
+
+% PRIMARY COLOR
 \definecolor{kthblue}{RGB}{25,84,166} % use structure theme to change
 
-\setbeamercolor{structure}{fg=kthblue}
+% SECONDARY COLORS
+\definecolor{kthcyan}{RGB}{36,160,216}
+\definecolor{kthpink}{RGB}{216,84,151}
+\definecolor{kthlime}{RGB}{176,201,43}
+\definecolor{kthgray}{RGB}{101,101,108}
+\colorlet{kthgrey}{kthgray} % alias
 
-\setbeamercolor{page number in head/foot}{fg=gray}
+\setbeamercolor{structure}{fg=kthblue}
+\setbeamercolor{footnote}{fg=kthgray}
 
 
 % INNER THEME
 \defbeamertemplate*{title page}{kth}[1][]
 {
   \tikz[remember picture,overlay]%
-  \node[inner sep=0cm, xshift=3.75mm, yshift=-3.75mm, anchor=north west]%
+  \node[inner sep=0cm, xshift=5mm, yshift=-5mm, anchor=north west]%
   at (current page.north west)%
   {\includegraphics[width=15mm, height=15mm, keepaspectratio]{img/logo.pdf}};
   \tikz[remember picture,overlay]%
-  \node[inner sep=0cm, xshift=3.75mm, yshift=-22.5mm, anchor=north west]%
+  \node[inner sep=0cm, xshift=5mm, yshift=-25mm, anchor=north west]%
   at (current page.north west)%
   {\@extra};
   \tikz[remember picture,overlay]%
@@ -97,8 +106,8 @@
   };
   %TITLESTYLE
   \ifnum\pdf@strcmp{\beamer@KTH@titlestyle}{topleft}=0%
-    \vskip 2mm
-    \begin{beamercolorbox}[leftskip=13mm, #1]{title}
+    \vskip 3.25mm
+    \begin{beamercolorbox}[leftskip=15mm, #1]{title}
       \usebeamerfont{title}\inserttitle\par%
       \ifx\insertsubtitle\@empty%
       \else%
@@ -106,13 +115,13 @@
       {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
       \fi%
     \end{beamercolorbox}\vspace{4mm}
-    \begin{beamercolorbox}[leftskip=13mm,#1]{author}
+    \begin{beamercolorbox}[leftskip=15mm,#1]{author}
       \usebeamerfont{author}\insertauthor
     \end{beamercolorbox}\vspace{2mm}
-    \begin{beamercolorbox}[leftskip=13mm,#1]{institute}
+    \begin{beamercolorbox}[leftskip=15mm,#1]{institute}
       \usebeamerfont{institute}\insertinstitute
     \end{beamercolorbox}\vspace{2mm}
-    \begin{beamercolorbox}[leftskip=13mm,#1]{date}
+    \begin{beamercolorbox}[leftskip=15mm,#1]{date}
       \usebeamerfont{date}\insertdate
     \end{beamercolorbox}
   \else\ifnum\pdf@strcmp{\beamer@KTH@titlestyle}{centered}=0%
@@ -150,8 +159,8 @@
 {
   \tikz[remember picture,overlay]%
   \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
-  \usebeamercolor[fg]{page number in head/foot}%
-  \usebeamerfont{page number in head/foot}%
+  \usebeamercolor[fg]{footnote}%
+  \usebeamerfont{footnote}%
   \hspace*{0.03\paperwidth}%
   % Select footer style (The @{} in tabular removes any padding between cells.)
   \ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lr}=0%
@@ -182,20 +191,42 @@
   \@tempdima=\textwidth%
   \advance\@tempdima by\beamer@leftmargin%
   \advance\@tempdima by\beamer@rightmargin%
+  % Compute title heights for vertical alignment in a font-friendly manner
+  \newdimen\@tmpdimx\@tmpdimx=0pt%
+  \newdimen\@tmpdimy\@tmpdimy=0pt%
+  \newdimen\@tmpdimz\@tmpdimz=0pt%
+  % (Title only, ignore descenders in alignment)
+  \newdimen\@dimTitleAlignHeight%
+  \setbox0=\hbox{\usebeamerfont{frametitle} \strut x \strut}%
+  \setbox1=\hbox{\usebeamerfont{frametitle} PTIF}%
+  \setbox2=\hbox{\usebeamerfont{frametitle} PTIFjgyq}%
+  \@tmpdimx=\ht0 \advance\@tmpdimx by \dp0%
+  \@tmpdimy=\ht1 \advance\@tmpdimy by \dp1%
+  \@tmpdimz=\ht2 \advance\@tmpdimz by \dp2%
+  \@dimTitleAlignHeight=\dimexpr5mm - (\@tmpdimx + \@tmpdimy - \@tmpdimz) / 2\relax%
+  % (Title + subtitle)
+  \newdimen\@dimDoubleTitleAlignHeight%
+  \setbox0=\hbox{\usebeamerfont{frametitle} \strut x \strut}%
+  \setbox1=\hbox{\usebeamerfont{framesubtitle} \strut x \strut}%
+  \@tmpdimx=\ht0 \advance\@tmpdimx by \dp0%
+  \@tmpdimy=\ht1 \advance\@tmpdimy by \dp1%
+  \@dimDoubleTitleAlignHeight=\dimexpr5mm - (\@tmpdimx + \@tmpdimy) / 2\relax%
   \begin{beamercolorbox}[#1,wd=\the\@tempdima]{frametitle}
     \usebeamerfont{frametitle}%
     \vspace{0cm}% This aligns the colorbox at the top for some reason
-    \begin{minipage}[t][][c]{15mm}
-      \tikz \node[inner sep=2.5mm] {\includegraphics[height=10mm]{img/logo.pdf}};
+    \begin{minipage}[t][][c]{16.6mm}
+      \tikz \node[inner sep=3.3mm] {\includegraphics[height=10mm]{img/logo.pdf}};
     \end{minipage}%
     \begin{minipage}[t][][c]{0.8\paperwidth}
-      \vspace{8pt}
+      \vspace{3.3mm}
       % If no subtitle, center title with logo
       \ifx\insertframesubtitle\@empty%
-        \vspace{6pt}%
+        \vspace{\the\@dimTitleAlignHeight}%
+      \else%
+        \vspace{\@dimDoubleTitleAlignHeight}%
       \fi%
       \usebeamerfont{frametitle}%
-      \vbox{}\vskip-1ex%
+      %\vbox{}\vskip-1ex%
     \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
       \strut\insertframetitle\strut\par%
       {%
