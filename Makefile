@@ -1,4 +1,6 @@
-.PHONY: example clean
+.PHONY: example package clean \
+        install-texlive \
+        uninstall-texlive
 
 SHELL = bash
 
@@ -24,6 +26,42 @@ example-aspect%.pdf:
 	mv $(PDFFILE) .
 
 example: example.pdf $(foreach ar, 32 43 54 149 169 1610, example-aspect$(ar).pdf)
+
+# Builds a .zip package according to CTAN guidelines:
+# https://ctan.org/help/upload-pkg
+package:
+	$(eval PKG-DIR := $(BUILD-DIR)/_package)
+	rm -rf $(PKG-DIR)
+	mkdir -p $(PKG-DIR)
+
+	mkdir $(PKG-DIR)/kth-beamer
+	cp *kth.sty README.md $(PKG-DIR)/kth-beamer
+	cp -r img $(PKG-DIR)/kth-beamer/img
+	cd $(PKG-DIR) && zip -r kth-beamer.zip kth-beamer
+	mv $(PKG-DIR)/kth-beamer.zip .
+
+# Locally install for texlive on Linux
+install-texlive:
+	$(eval PWD := $(shell pwd -P))
+	$(eval TEXMFHOME := $(shell kpsewhich --var-value TEXMFHOME))
+	$(eval TEXMFLOCAL := $(shell kpsewhich --var-value TEXMFLOCAL))
+	$(eval TEXMFDIST := $(shell kpsewhich --var-value TEXMFDIST))
+	@echo "Locally installing kth-beamer for texlive."
+	@echo -e "(\033[1;31mEXPERIMENTAL FEATURE.\033[0m For testing purposes only. Use CTAN package otherwise.)"
+	@echo "TEXMFHOME = $(TEXMFHOME)"
+	@echo "TEXMFLOCAL = $(TEXMFLOCAL)"
+	@echo "TEXMFDIST = $(TEXMFDIST)"
+	$(eval INSTALL_ROOT := /usr/local/share/texmf/tex/latex)
+	@echo "Installing package at $(INSTALL_ROOT)"
+	mkdir -p $(INSTALL_ROOT)
+	cd $(INSTALL_ROOT) && unzip $(PWD)/kth-beamer.zip
+	mktexlsr
+
+uninstall-texlive:
+	$(eval INSTALL_PATH := /usr/local/share/texmf/tex/latex/kth-beamer)
+	@echo "Uninstalling package at $(INSTALL_PATH)"
+	rm -r $(INSTALL_PATH)
+	mktexlsr
 
 clean:
 	git clean -Xdf
