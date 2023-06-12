@@ -1,5 +1,6 @@
 _build/
 example-aspect*.pdf
+kth-beamer.zip
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

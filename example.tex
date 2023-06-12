@@ -1,7 +1,8 @@
 \documentclass{beamer}
 
 \usetheme{kth}
-%\usetheme[tikzlines, titlestyle=centered]{kth}
+%\usetheme[title style=centered]{kth}
+%\usefonttheme{kth}
 
 \title[Short Paper Title]
 {Title As It Is In the Proceedings}
@@ -49,7 +50,7 @@
 
 \subsection{The Basic Problem That We Studied}
 
-\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
+\begin{frame}{Make Titles Informative. Use Uppercase.}{Subtitles are optional.}
   \begin{itemize}
   \item
     Use \texttt{itemize} a lot.
@@ -91,9 +92,50 @@
 \subsection{Previous Work}
 
 \begin{frame}{Make Titles Informative.}
+  \begin{columns}
+    \column{0.45\textwidth}
+      Left column with items
+      \begin{itemize}
+      \item
+        An item to the left
+      \item
+        Another item to the left
+      \item
+        ...
+      \end{itemize}
+    \column{0.45\textwidth}
+      \begin{figure}
+        \includegraphics[width=0.75\textwidth]{img/logo.pdf}
+        \caption{Relative \texttt{\symbol{92}textwidth}}
+      \end{figure}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Make Titles Informative.}
+  \begin{columns}[T]
+    \column{0.45\textwidth}
+      Left column with items
+      \begin{itemize}
+      \item
+        Use the \texttt{[T]} option to align columns vertically
+      \item
+        Right column with two images
+      \item
+        \texttt{\symbol{92}minipage} on the right to split vertically
+      \end{itemize}
+    \column{0.45\textwidth}
+      \begin{minipage}[c][0.35\textheight][c]{0.9\textwidth}
+        \begin{figure}
+          \includegraphics[width=0.8\textwidth]{img/logo.pdf}
+        \end{figure}
+      \end{minipage}
+      \begin{minipage}[c][0.35\textheight][c]{0.9\textwidth}
+        \begin{figure}
+          \includegraphics[width=0.4\textwidth]{img/logo.pdf}%
+          \includegraphics[width=0.4\textwidth]{img/logo.pdf}
+        \end{figure}
+      \end{minipage}
+  \end{columns}
 \end{frame}
 
 \section{Our Results/Contribution}
