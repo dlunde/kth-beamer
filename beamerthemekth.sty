@@ -3,9 +3,9 @@
 % OPTIONS
 
 % "footerstyle": The footer style to use for the outer theme. Available styles:
-%  - lr: Left and right footer contents
 %  - lcr: Left, center, and right footer contents
-\newcommand\beamer@KTH@footerstyle{lr}
+%  - progress: Lcr, but with a progress bar
+\newcommand\beamer@KTH@footerstyle{lcr}
 \newcommand\kthfooterstyle[1]{\renewcommand\beamer@KTH@footerstyle{#1}}
 \DeclareOptionBeamer{footerstyle}{\kthfooterstyle{#1}}
 
@@ -44,6 +44,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{tikz}
 \RequirePackage{pdftexcmds}
+\RequirePackage{tabularx}
 
 % COMMANDS
 \newcommand\extra[1]{\renewcommand\@extra{#1}}
@@ -157,20 +158,13 @@
 
 \defbeamertemplate*{footline}{kth}
 {
-  \tikz[remember picture,overlay]%
-  \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
   \usebeamercolor[fg]{footnote}%
   \usebeamerfont{footnote}%
-  \hspace*{0.03\paperwidth}%
   % Select footer style (The @{} in tabular removes any padding between cells.)
-  \ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lr}=0%
-    \parbox[c][8mm][c]{0.94\paperwidth}{%
-      \begin{tabular}{@{}p{0.47\paperwidth}@{}p{0.47\paperwidth}@{}}%
-      \raggedright\beamer@KTH@lfoot & %
-      \raggedleft\beamer@KTH@rfoot%
-      \end{tabular}%
-    }%
-  \else\ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lcr}=0%
+  \ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lcr}=0%
+    \tikz[remember picture,overlay]%
+    \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
+    \hspace*{0.03\paperwidth}%
     \parbox[c][8mm][c]{0.94\paperwidth}{%
       \begin{tabular}{@{}p{0.15\paperwidth}@{}p{0.64\paperwidth}@{}p{0.15\paperwidth}@{}}%
       \raggedright\beamer@KTH@lfoot & %
@@ -178,6 +172,68 @@
       \raggedleft\beamer@KTH@rfoot%
       \end{tabular}%
     }%
+  \else\ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{progress}=0%
+    \begingroup%
+      \newcolumntype{C}[1]{>{\centering\arraybackslash}p{####1}}
+      % #1 = section number, #2 = title, #3 = start page?, #4 = ??, #5 = ??
+      \renewcommand{\beamer@sectionintoc}[5]{}%
+      % #1 = section number, #2 = subsection number, #3 = title, #4 = start page?, #5 = ??, #6 = ??
+      \renewcommand{\beamer@subsectionintoc}[6]{}%
+      \def\TOTALSECTIONS{0}%
+      \def\SECTIONCOUNTER{0}%
+      \def\TABULARSPEC{@{}}%
+      \def\TABULARCONTENTS{}%
+      \newdimen\@TABULARCOLWIDTH%
+      \newdimen\@PROGRESSBARWIDTH%
+        \makeatletter%
+        \renewcommand{\beamer@sectionintoc}[5]{%
+          \ifnum \TOTALSECTIONS=0%
+          \else%
+            \edef\TABULARCONTENTS{\TABULARCONTENTS &}%
+          \fi%
+          \ifnum \thesection=####1%
+            %\edef\TABULARCONTENTS{\TABULARCONTENTS \textbf{####2 (####3)}}%
+            \edef\TABULARCONTENTS{\TABULARCONTENTS \textbf{####2}}%
+          \else%
+            \edef\TABULARCONTENTS{\TABULARCONTENTS \textcolor{kthgray!50}{####2}}%
+          \fi%
+          \edef\TOTALSECTIONS{\the\numexpr \TOTALSECTIONS + 1 \relax}%
+        }%
+        \input{\jobname.toc}%
+        \makeatother%
+      \@TABULARCOLWIDTH=\dimexpr0.94\paperwidth / \TOTALSECTIONS\relax%
+      \@PROGRESSBARWIDTH=\dimexpr0.03\paperwidth + 0.94\paperwidth * (\insertframenumber - 1) / (\inserttotalframenumber - 1) \relax%
+        \makeatletter%
+        \renewcommand{\beamer@sectionintoc}[5]{%
+          \makeatother%
+          \edef\TABULARSPEC{\TABULARSPEC C{\@TABULARCOLWIDTH}@{}}%
+          \makeatletter%
+        }%
+        \input{\jobname.toc}%
+        \makeatother%
+      \tikz[remember picture,overlay]%
+      \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
+      \tikz[remember picture,overlay]%
+      \fill[kthblue,yshift=8pt] (0.03\paperwidth,0) rectangle (\@PROGRESSBARWIDTH,1pt);%
+      \hspace*{0.03\paperwidth}%
+      \parbox[c][8mm][c]{0.94\paperwidth}{%
+        %\vspace*{-3mm}%
+        % This is hideous, but it works. Issue is that I use tabularx for
+        % \centering with \edef, but also need the column spec to be defined as
+        % a macro.
+        \vspace{-4mm}%
+        \edef\LATEXTABULARSPEC{\noexpand\begin{tabularx}{0.94\paperwidth}{\expandafter\noexpand\TABULARSPEC}}%
+        \LATEXTABULARSPEC%
+        \TABULARCONTENTS
+        \end{tabularx}%
+        \\[2mm]%
+        \begin{tabular}{@{}p{0.15\paperwidth}@{}p{0.64\paperwidth}@{}p{0.15\paperwidth}@{}}%
+        \raggedright\beamer@KTH@lfoot & %
+        \centering\beamer@KTH@cfoot & %
+        \raggedleft\beamer@KTH@rfoot%
+        \end{tabular}%
+      }%
+    \endgroup%
   \else%
     \PackageError{beamerthemekth}{Invalid footer style \beamer@KTH@footerstyle}{extra help}
   \fi\fi%
