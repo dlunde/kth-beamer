@@ -14,6 +14,7 @@ example.pdf:
 	cp example.tex $(TEXFILE)
 	$(PDFLATEX) $(TEXFILE)
 	$(PDFLATEX) $(TEXFILE)
+	$(PDFLATEX) $(TEXFILE)
 	mv $(PDFFILE) .
 
 example-aspect%.pdf:
@@ -21,6 +22,7 @@ example-aspect%.pdf:
 	$(eval PDFFILE := $(BUILD-DIR)/example-aspect$*.pdf)
 	mkdir -p $(BUILD-DIR)
 	tail --lines=+2 example.tex | cat <(echo "\documentclass[aspectratio=$*]{beamer}") - > $(TEXFILE)
+	$(PDFLATEX) $(TEXFILE)
 	$(PDFLATEX) $(TEXFILE)
 	$(PDFLATEX) $(TEXFILE)
 	mv $(PDFFILE) .
@@ -48,6 +50,7 @@ install-texlive:
 	$(eval TEXMFDIST := $(shell kpsewhich --var-value TEXMFDIST))
 	@echo "Locally installing kth-beamer for texlive."
 	@echo -e "(\033[1;31mEXPERIMENTAL FEATURE.\033[0m For testing purposes only. Use CTAN package otherwise.)"
+	@read -p "Are you sure you want to proceed? [y/N] " choice && if [[ "$${choice,,}" != "y" ]]; then exit 1; fi
 	@echo "TEXMFHOME = $(TEXMFHOME)"
 	@echo "TEXMFLOCAL = $(TEXMFLOCAL)"
 	@echo "TEXMFDIST = $(TEXMFDIST)"
