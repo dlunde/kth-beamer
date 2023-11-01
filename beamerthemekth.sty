@@ -3,11 +3,27 @@
 % OPTIONS
 
 % "footerstyle": The footer style to use for the outer theme. Available styles:
-%  - lr: Left and right footer contents
 %  - lcr: Left, center, and right footer contents
-\newcommand\beamer@KTH@footerstyle{lr}
-\newcommand\kthfooterstyle[1]{\renewcommand\beamer@KTH@footerstyle{#1}}
+%  - progress: Lcr, but with a progress bar
+\newcommand\beamer@KTH@footerstyle{lcr}
+\newcommand\kthfooterstyle[1]{%
+  % We only show the progress bar if the TOC file exists from the previous
+  % compilation
+  \ifnum\pdf@strcmp{#1}{progress}=0%
+    \IfFileExists{\jobname.toc}{\renewcommand\beamer@KTH@footerstyle{#1}}{}%
+  \else%
+    \renewcommand\beamer@KTH@footerstyle{#1}%
+  \fi%
+}
 \DeclareOptionBeamer{footerstyle}{\kthfooterstyle{#1}}
+
+% "progressincr": What to increment the progress bar by. The valid options are
+%  - frames: Increment the bar when changing to the next frame
+%  - pages: Increment the bar on the next page. This will allow for the
+%           progress bar to be updated on pause progression on the same frame.
+\newcommand\beamer@KTH@progressincr{frames}
+\newcommand\kthprogressincr[1]{\renewcommand\beamer@KTH@progressincr{#1}}
+\DeclareOptionBeamer{progressincr}{\kthprogressincr{#1}}
 
 % "lfoot": Contents of the left footer
 \newcommand\beamer@KTH@lfoot{\insertdate}
@@ -24,16 +40,16 @@
 \newcommand\kthrfoot[1]{\renewcommand\beamer@KTH@rfoot{#1}}
 \DeclareOptionBeamer{rfoot}{\kthrfoot{#1}}
 
-% "lines": How to render the lines on the title slide
+% "lines": How to render the lines on the title frame
 \newcommand\beamer@KTH@lines{pdf}
 \newcommand\kthlines[1]{\renewcommand\beamer@KTH@lines{#1}}
 \DeclareOptionBeamer{lines}{\kthlines{#1}}
 \DeclareOptionBeamer{pdflines}{\kthlines{pdf}}
 \DeclareOptionBeamer{tikzlines}{\kthlines{tikz}}
 
-% "titlestyle": The style to use for text on the title slide
+% "titlestyle": The style to use for text on the title frame
 %  - topleft: Text aligned to the top left (but right of KTH logo)
-%  - centered: Text aligned in the center of the slide
+%  - centered: Text aligned in the center of the frame
 \newcommand\beamer@KTH@titlestyle{topleft}
 \newcommand\kthtitlestyle[1]{\renewcommand\beamer@KTH@titlestyle{#1}}
 \DeclareOptionBeamer{titlestyle}{\kthtitlestyle{#1}}
@@ -41,9 +57,11 @@
 \ProcessOptionsBeamer
 
 % REQUIRED PACKAGES
+\RequirePackage{ifthen}
 \RequirePackage{graphicx}
 \RequirePackage{tikz}
 \RequirePackage{pdftexcmds}
+\RequirePackage{tabularx}
 
 % COMMANDS
 \newcommand\extra[1]{\renewcommand\@extra{#1}}
@@ -157,20 +175,13 @@
 
 \defbeamertemplate*{footline}{kth}
 {
-  \tikz[remember picture,overlay]%
-  \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
   \usebeamercolor[fg]{footnote}%
   \usebeamerfont{footnote}%
-  \hspace*{0.03\paperwidth}%
   % Select footer style (The @{} in tabular removes any padding between cells.)
-  \ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lr}=0%
-    \parbox[c][8mm][c]{0.94\paperwidth}{%
-      \begin{tabular}{@{}p{0.47\paperwidth}@{}p{0.47\paperwidth}@{}}%
-      \raggedright\beamer@KTH@lfoot & %
-      \raggedleft\beamer@KTH@rfoot%
-      \end{tabular}%
-    }%
-  \else\ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lcr}=0%
+  \ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{lcr}=0%
+    \tikz[remember picture,overlay]%
+    \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
+    \hspace*{0.03\paperwidth}%
     \parbox[c][8mm][c]{0.94\paperwidth}{%
       \begin{tabular}{@{}p{0.15\paperwidth}@{}p{0.64\paperwidth}@{}p{0.15\paperwidth}@{}}%
       \raggedright\beamer@KTH@lfoot & %
@@ -178,6 +189,77 @@
       \raggedleft\beamer@KTH@rfoot%
       \end{tabular}%
     }%
+  \else\ifnum\pdf@strcmp{\beamer@KTH@footerstyle}{progress}=0%
+    \begingroup%
+      \newcolumntype{C}[1]{>{\centering\arraybackslash}p{####1}}
+      % #1 = section number, #2 = title, #3 = start page?, #4 = ??, #5 = ??
+      \renewcommand{\beamer@sectionintoc}[5]{}%
+      % #1 = section number, #2 = subsection number, #3 = title, #4 = start page?, #5 = ??, #6 = ??
+      \renewcommand{\beamer@subsectionintoc}[6]{}%
+      \def\TOTALSECTIONS{0}%
+      \def\SECTIONCOUNTER{0}%
+      \def\TABULARSPEC{@{}}%
+      \def\TABULARCONTENTS{}%
+      \newdimen\@TABULARCOLWIDTH%
+      \newdimen\@PROGRESSBARWIDTH%
+      \ifnum\pdf@strcmp{\beamer@KTH@progressincr}{frames}=0%
+        \@PROGRESSBARWIDTH=\dimexpr0.03\paperwidth + 0.94\paperwidth * (\insertframenumber - 1) / (\inserttotalframenumber - 1) \relax%
+      \else\ifnum\pdf@strcmp{\beamer@KTH@progressincr}{pages}=0%
+        \@PROGRESSBARWIDTH=\dimexpr0.03\paperwidth + 0.94\paperwidth * (\thepage - 1) / (\@abspage@last - 1) \relax%
+      \else
+        \PackageError{beamerthemekth}{Invalid progress increment \beamer@KTH@progressincr}{extra help}
+      \fi\fi
+        \makeatletter%
+        \renewcommand{\beamer@sectionintoc}[5]{%
+          \ifnum \TOTALSECTIONS=0%
+          \else%
+            \edef\TABULARCONTENTS{\TABULARCONTENTS &}%
+          \fi%
+          \ifnum \thesection=####1%
+            %\edef\TABULARCONTENTS{\TABULARCONTENTS \textbf{####2 (####3)}}%
+            \edef\TABULARCONTENTS{\TABULARCONTENTS \textbf{####2}}%
+          \else%
+            \edef\TABULARCONTENTS{\TABULARCONTENTS \textcolor{kthgray!50}{####2}}%
+          \fi%
+          \edef\TOTALSECTIONS{\the\numexpr \TOTALSECTIONS + 1 \relax}%
+        }%
+        \input{\jobname.toc}%
+        \makeatother%
+      \ifnum \TOTALSECTIONS>0%
+        \@TABULARCOLWIDTH=\dimexpr0.94\paperwidth / \TOTALSECTIONS\relax%
+          \makeatletter%
+          \renewcommand{\beamer@sectionintoc}[5]{%
+            \makeatother%
+            \edef\TABULARSPEC{\TABULARSPEC C{\@TABULARCOLWIDTH}@{}}%
+            \makeatletter%
+          }%
+          \input{\jobname.toc}%
+          \makeatother%
+      \fi
+      \tikz[remember picture,overlay]%
+      \draw[color=kthblue,yshift=8pt] (0.03\paperwidth,0) -- (0.97\paperwidth,0);%
+      \tikz[remember picture,overlay]%
+      \fill[kthblue,yshift=8pt] (0.03\paperwidth,0) rectangle (\@PROGRESSBARWIDTH,1pt);%
+      \hspace*{0.03\paperwidth}%
+      \parbox[c][8mm][c]{0.94\paperwidth}{%
+        % This is hideous, but it works. Issue is that I use tabularx for
+        % \centering with \edef, but also need the column spec to be defined as
+        % a macro.
+        \ifnum \TOTALSECTIONS>0%
+          \vspace{-4mm}%
+          \edef\LATEXTABULARSPEC{\noexpand\begin{tabularx}{0.94\paperwidth}{\expandafter\noexpand\TABULARSPEC}}%
+          \LATEXTABULARSPEC%
+          \TABULARCONTENTS
+          \end{tabularx}%
+          \\[2mm]%
+        \fi
+        \begin{tabular}{@{}p{0.15\paperwidth}@{}p{0.64\paperwidth}@{}p{0.15\paperwidth}@{}}%
+        \raggedright\beamer@KTH@lfoot & %
+        \centering\beamer@KTH@cfoot & %
+        \raggedleft\beamer@KTH@rfoot%
+        \end{tabular}%
+      }%
+    \endgroup%
   \else%
     \PackageError{beamerthemekth}{Invalid footer style \beamer@KTH@footerstyle}{extra help}
   \fi\fi%
