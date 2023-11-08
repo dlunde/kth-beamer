@@ -41,11 +41,11 @@
 \DeclareOptionBeamer{rfoot}{\kthrfoot{#1}}
 
 % "lines": How to render the lines on the title frame
-\newcommand\beamer@KTH@lines{pdf}
+\newcommand\beamer@KTH@lines{tikz}
 \newcommand\kthlines[1]{\renewcommand\beamer@KTH@lines{#1}}
 \DeclareOptionBeamer{lines}{\kthlines{#1}}
-\DeclareOptionBeamer{pdflines}{\kthlines{pdf}}
 \DeclareOptionBeamer{tikzlines}{\kthlines{tikz}}
+\DeclareOptionBeamer{nolines}{\kthlines{no}}
 
 % "titlestyle": The style to use for text on the title frame
 %  - topleft: Text aligned to the top left (but right of KTH logo)
@@ -100,9 +100,7 @@
   at (current page.south)%
   {%
   %LINES
-  \ifnum\pdf@strcmp{\beamer@KTH@lines}{pdf}=0%
-    \includegraphics[width=0.94\paperwidth,trim=25cm 0 20cm 0,clip]{img/lines.pdf}%
-  \else\ifnum\pdf@strcmp{\beamer@KTH@lines}{tikz}=0%
+  \ifnum\pdf@strcmp{\beamer@KTH@lines}{tikz}=0%
     \resizebox{0.94\paperwidth}{!}{%
       \begin{tikzpicture}[line width=0.25pt,rounded corners=2pt,color=kthblue,x=2mm,y=2mm]
         \clip (4,-1) rectangle (81, 12);
@@ -117,6 +115,8 @@
         -- (61.7,8) -- (71,8) -- (71,-0.5) -- (82,-0.5) -- (82,4) -- (95,4);
       \end{tikzpicture}%
     }%
+  \else\ifnum\pdf@strcmp{\beamer@KTH@lines}{no}=0%
+    % no lines
   \else%
     \PackageError{beamerthemekth}{Invalid lines style \beamer@KTH@lines}{extra help}
   \fi\fi%

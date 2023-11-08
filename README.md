@@ -66,8 +66,8 @@ available:
              "CurrentFrame / TotalFrames".
 * **lines**: Sets which kind of lines that should be rendered on the title
              frame. The available values for this option are:
-  * `pdf` _(default)_: Use the lines from `img/lines.pdf`.
-  * `tikz`: Render the lines using tikz.
+  * `tikz` _(default)_: Render the lines using tikz.
+  * `no`: Do not render any lines.
 * **titlestyle**: Specified alignment of title frame contents. The available
                   values for this option are:
   * `topleft` _(default)_: Align the contents to the top left of the frame, but
