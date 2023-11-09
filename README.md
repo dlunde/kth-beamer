@@ -4,8 +4,20 @@ elements on top of the default beamer theme.
 
 ## Installation
 An installable package for this theme is work in progress, but not yet ready
-for use. The safest bet is currently to copy the `.sty` files and the `img/`
-directory to where you have your .tex file.
+for use.  The simplest way to integrate kth-beamer into your project is to
+extract the package into directory with your tex files:
+
+```sh
+# Create package and copy it to your project dir
+make package
+mv kth-beamer.zip YOUR_PROJECT_DIR
+cd YOUR_PROJECT_DIR
+# Extract contents
+unzip kth-beamer.zip
+mv kth-beamer/*{.sty,-resources} .
+# Remove the remaining directory and zip archive
+rm -rf kth-beamer.zip kth-beamer/
+```
 
 **If you know what you are doing and you are prepared to accept the risks**,
 you can for install the package system wide by running the following:

@@ -38,7 +38,7 @@ package:
 
 	mkdir $(PKG-DIR)/kth-beamer
 	cp *kth.sty README.md $(PKG-DIR)/kth-beamer
-	cp -r img $(PKG-DIR)/kth-beamer/img
+	cp -r kth-beamer-resources $(PKG-DIR)/kth-beamer/kth-beamer-resources
 	cd $(PKG-DIR) && zip -r kth-beamer.zip kth-beamer
 	mv $(PKG-DIR)/kth-beamer.zip .
 
