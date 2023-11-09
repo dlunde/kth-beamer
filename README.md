@@ -20,8 +20,8 @@ mv kth-beamer/*{.sty,-resources} .
 rm -rf kth-beamer.zip kth-beamer/
 ```
 
-**If you know what you are doing and you are prepared to accept the risks**,
-you can for install the package system wide by running the following:
+If you know what you are doing and you are prepared to accept the risks, you
+can for install the package system wide by running the following:
 
 ```sh
 make package
