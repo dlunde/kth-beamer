@@ -1,6 +1,7 @@
 # KTH Beamer Theme
-A minimalistic LaTeX beamer theme for KTH presentations. Adds a few graphical
-elements on top of the default beamer theme.
+A minimalistic LaTeX beamer theme for _KTH Royal Institute of Technology_
+presentations. Adds a few graphical elements on top of the default beamer
+theme.
 
 ## Installation
 An installable package for this theme is work in progress, but not yet ready
@@ -35,8 +36,16 @@ Use the KTH beamer theme in your presentation by adding this to the preamble
 (see below for available theme options):
 
 ```tex
-\usetheme[<OPTIONS>]{kth}
+\usetheme[accept kth terms, <OPTIONS>]{kth}
 ```
+
+The presence of `accept kth terms` in the theme options, with or without
+spaces, indicates that you acknowledge the KTH logotype usage terms and that
+you are allowed to use it for the purposes of your presentation. **This usually
+means that (a) you are an employee of KTH, or (b) you are a student of KTH who
+is presenting a thesis or dissertation.** If you do not accept the KTH logotype
+usage terms then the logotype will not be shown. See the `logo` option below
+for more information.
 
 To use the KTH theme font instead of the standard beamer font, add this to the
 preamble as well:
@@ -51,6 +60,10 @@ To include the theme specific title frame, add this directly after
 ```tex
 \frame[plain, t]{\titlepage}
 ```
+
+**It is recommended to compile the presentation at least three times.** Certain
+features of the presentation rely on a complete table of contents and will not
+show correctly until that is present.
 
 ### Theme Options
 Apply options in usetheme as a comma separated list
@@ -85,6 +98,12 @@ available:
   * `topleft` _(default)_: Align the contents to the top left of the frame, but
                            right of the KTH logo.
   * `center`: Align the contents to the center of the frame.
+* **logo**: Specifies path to the logotype to show in the top-left corner of
+            each frame. No logotype is shown by default. **To show the KTH
+            logo, add `accept kth terms` to the list of options:**
+  * ```tex
+    \usepackage[accept kth terms, <other options>]{kth}
+    ```
 
 These options can also be specified later on by `\kth<optname>{value}`, for
 example:

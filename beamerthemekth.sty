@@ -40,6 +40,13 @@
 \newcommand\kthrfoot[1]{\renewcommand\beamer@KTH@rfoot{#1}}
 \DeclareOptionBeamer{rfoot}{\kthrfoot{#1}}
 
+% "logo": Path to logotype to render at the top-left corner on each frame. By
+% default it is absent. Accepting the KTH logotype usage terms will enable the
+% KTH logotype.
+\newcommand\beamer@KTH@logo{}
+\newcommand\kthlogo[1]{\renewcommand\beamer@KTH@logo{#1}}
+\DeclareOptionBeamer{logo}{\kthlogo{#1}}
+
 % "lines": How to render the lines on the title frame
 \newcommand\beamer@KTH@lines{tikz}
 \newcommand\kthlines[1]{\renewcommand\beamer@KTH@lines{#1}}
@@ -53,6 +60,12 @@
 \newcommand\beamer@KTH@titlestyle{topleft}
 \newcommand\kthtitlestyle[1]{\renewcommand\beamer@KTH@titlestyle{#1}}
 \DeclareOptionBeamer{titlestyle}{\kthtitlestyle{#1}}
+
+% "acceptkthterms" is a flag that enables the usage of the KTH logo in the
+% presentation. Doing so indicates that you acknowledge the usage terms of the
+% KTH logo and that you are allowed to use it for the purposes of your
+% presentation.
+\DeclareOptionBeamer{acceptkthterms}{\kthlogo{kth-beamer-resources/logo.pdf}}
 
 \ProcessOptionsBeamer
 
@@ -90,7 +103,12 @@
   \tikz[remember picture,overlay]%
   \node[inner sep=0cm, xshift=5mm, yshift=-5mm, anchor=north west]%
   at (current page.north west)%
-  {\includegraphics[width=15mm, height=15mm, keepaspectratio]{kth-beamer-resources/logo.pdf}};
+  {%
+  \ifnum\pdf@strcmp{\beamer@KTH@logo}{}=0% no logotype is specified
+  \else%
+    \includegraphics[width=15mm, height=15mm, keepaspectratio]{\beamer@KTH@logo}%
+  \fi%
+  };
   \tikz[remember picture,overlay]%
   \node[inner sep=0cm, xshift=5mm, yshift=-25mm, anchor=north west]%
   at (current page.north west)%
@@ -296,9 +314,13 @@
   \begin{beamercolorbox}[#1,wd=\the\@tempdima]{frametitle}
     \usebeamerfont{frametitle}%
     \vspace{0cm}% This aligns the colorbox at the top for some reason
-    \begin{minipage}[t][][c]{16.6mm}
-      \tikz \node[inner sep=3.3mm] {\includegraphics[height=10mm]{kth-beamer-resources/logo.pdf}};
-    \end{minipage}%
+    \ifnum\pdf@strcmp{\beamer@KTH@logo}{}=0%
+      \hspace{5mm}% no logotype is specified
+    \else%
+      \begin{minipage}[t][][c]{16.6mm}%
+        \tikz \node[inner sep=3.3mm] {\includegraphics[height=10mm, keepaspectratio]{\beamer@KTH@logo}};
+      \end{minipage}%
+    \fi%
     \begin{minipage}[t][][c]{0.8\paperwidth}
       \vspace{3.3mm}
       % If no subtitle, center title with logo
